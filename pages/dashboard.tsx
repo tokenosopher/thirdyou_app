@@ -14,7 +14,7 @@ export default function dashboard() {
         flexDirection: "column",
       }}
     >
-      Hi I'm Dashboard
+      Hi You are in Dashboard
     </Box>
   );
 }
