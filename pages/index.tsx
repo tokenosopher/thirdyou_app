@@ -3,9 +3,56 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
+import { CHAIN_NAMESPACES } from "@web3auth/base";
+import { MetamaskAdapter } from "@web3auth/metamask-adapter";
+import { ADAPTER_EVENTS } from "@web3auth/base";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Web3Auth } from "@web3auth/web3auth";
 
 export default function Home() {
   const router = useRouter();
+
+  const [initialized, setInitialized] = useState(false);
+
+  function subscribeAuthEvents(web3auth) {
+    web3auth.on(ADAPTER_EVENTS.CONNECTED, (data) => {
+      console.log(" CONNECTED Data", data);
+    });
+    web3auth.on(ADAPTER_EVENTS.CONNECTING, () => {
+      console.log("connecting XXXXXXXXX");
+    });
+
+    web3auth.on(ADAPTER_EVENTS.DISCONNECTED, () => {
+      console.log("disconnected");
+    });
+
+    web3auth.on(ADAPTER_EVENTS.ERRORED, (error) => {
+      console.log("soerror or user have cancelled login request", error);
+    });
+  }
+
+  const initializeModal = async (): Promise<any> => {
+    console.log("*** InitModal ***");
+    try {
+      const { Web3Auth } = await import("@web3auth/web3auth");
+      const web3auth = new Web3Auth({
+        chainConfig: { chainNamespace: CHAIN_NAMESPACES.EIP155 },
+        clientId: process.env.CLIENT_ID_WEB3AUTH,
+      });
+      subscribeAuthEvents(web3auth);
+      await web3auth.initModal();
+      setInitialized(true);
+
+      return web3auth;
+    } catch (error) {
+      console.log("error", error);
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    initializeModal();
+  }, []);
   return (
     <div className={styles.container}>
       <Head>
@@ -38,7 +85,13 @@ export default function Home() {
           <div>
             <Button
               variant="contained"
-              onClick={() => router.push("/dashboard")}
+              onClick={() => {
+                if (initialized) {
+                  Web3Auth.call;
+                  console.log("Initialized");
+                  router.push("/dashboard");
+                }
+              }}
             >
               Start
             </Button>{" "}
