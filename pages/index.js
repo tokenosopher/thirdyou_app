@@ -1,10 +1,13 @@
 import Head from "next/head";
-import Image from "next/image";
+import Home from "../components/Home";
+import dynamic from "next/dynamic";
+const Header = dynamic(() => import("../components/Header"));
+const Footer = dynamic(() => import("../components/Footer"));
+
 import styles from "../styles/Home.module.css";
-import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 
-export default function Home() {
+export default function Index() {
   const router = useRouter();
   return (
     <div className={styles.container}>
@@ -14,57 +17,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Box
-        display="flex"
-        sx={{
-          justifyContent: "center",
-          justifyItems: "center",
-          alignContent: "center",
-          alignItems: "center",
-          height: "100vh",
-
-          color: "white",
-          flexDirection: "column",
-        }}
-      >
-        <Box
-          sx={{
-            justifyContent: "center",
-            alignContent: "center",
-            my: "5%",
-            flexDirection: "column",
-          }}
-        >
-          <div>
-            <Button
-              variant="contained"
-              onClick={() => router.push("/dashboard")}
-            >
-              Start
-            </Button>{" "}
-          </div>
-        </Box>
-        <Box>
-          {" "}
-          <footer className={styles.footer}>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Powered by{" "}
-              <span className={styles.logo}>
-                <Image
-                  src="/vercel.svg"
-                  alt="Vercel Logo"
-                  width={72}
-                  height={16}
-                />
-              </span>
-            </a>
-          </footer>
-        </Box>
-      </Box>
+      <Header />
+      <Home />
+      <Footer />
     </div>
   );
 }
