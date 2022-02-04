@@ -17,8 +17,10 @@
  * phrase from a file you've .gitignored so it doesn't accidentally become public.
  *
  */
-
+require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
+const pKey = process.env.PRIVATE_KEY;
+const mumbaiRPC = process.env.MUMBAI_RPC;
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -73,8 +75,8 @@ module.exports = {
     // }
     mumbai: {
       provider: new HDWalletProvider({
-        privateKeys: [process.env.PRIVATE_KEY],
-        providerOrUrl: process.env.MUMBAI_RPC, //https://rpc-mumbai.maticvigil.com
+        privateKeys: [pKey],
+        providerOrUrl: "https://rpc-mumbai.maticvigil.com", //https://rpc-mumbai.maticvigil.com
       }),
       chainId: "80001",
       network_id: 80001,

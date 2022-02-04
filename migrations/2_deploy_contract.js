@@ -4,7 +4,7 @@ const path = require("path");
 const NFT = artifacts.require("ThirdYou");
 
 module.exports = async function (deployer) {
-  const filePath = path.join("../", "config.js");
+  const filePath = path.join(__dirname, "config.js"); //TODO __dirname
   console.log(filePath);
 
   await deployer.deploy(NFT);
