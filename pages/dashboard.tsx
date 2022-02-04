@@ -3,9 +3,11 @@ import { Box, Button } from "@mui/material";
 import dynamic from "next/dynamic";
 const Header = dynamic(() => import("../components/Header"));
 const Footer = dynamic(() => import("../components/Footer"));
+import Wallet from "../components/Wallet";
 export default function dashboard() {
   return (
     <>
+      {/* TODO Render according user Profile */}
       <Header />
       <Box
         sx={{
@@ -24,7 +26,7 @@ export default function dashboard() {
           flexDirection: "column",
         }}
       >
-        DASHBOARD PAGE
+        <Wallet />
       </Box>
       <Footer />
     </>
