@@ -19,7 +19,7 @@ export async function createWalletOps(): Promise<WalletDetails> {
     email: "", //Email associated to 2.0 user.
   };
 
-  walletDetails.public = wallet.publicKey;
+  walletDetails.public = wallet.address;
   walletDetails.pkey = wallet.privateKey;
   walletDetails.mnemonic = wallet.mnemonic.phrase;
   console.log("Wallet Details:", walletDetails);
@@ -30,7 +30,7 @@ export async function createWalletOps(): Promise<WalletDetails> {
     walletDetails.public
   );
 
-  user.public_address = wallet.publicKey;
+  user.public_address = wallet.address;
   user.email = "isaacwi@gmail.com"; //TODO
   const res = await createUser(user);
   if (res) {
