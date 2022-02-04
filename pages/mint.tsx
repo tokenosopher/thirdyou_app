@@ -3,6 +3,8 @@ import { Box, Button } from "@mui/material";
 import dynamic from "next/dynamic";
 const Header = dynamic(() => import("../components/Header"));
 const Footer = dynamic(() => import("../components/Footer"));
+import MintForm from "../components/MintForm";
+
 export default function Mint() {
   return (
     <>
@@ -24,7 +26,7 @@ export default function Mint() {
           flexDirection: "column",
         }}
       >
-        MINT PAGE
+        <MintForm />
       </Box>
       <Footer />
     </>
