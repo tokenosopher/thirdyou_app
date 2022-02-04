@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
+import { createWalletOps } from "../components/lib/ops";
+import { CircularProgress } from "@mui/material";
 
 export default function Wallet() {
+  const [walletStatus, setWalletStatus] = useState("");
+
   async function createWallet() {
     console.log("Creating Wallet ");
+    const wallet = await createWalletOps();
+    console.log("Wallet created > ", wallet);
+    if (wallet) setWalletStatus("loaded");
   }
-  return (
+  useEffect(() => {
+    console.log("useEffect");
+  }, [walletStatus]);
+  return walletStatus === "" ? (
     <Box
       sx={{
         height: "50vh",
@@ -35,11 +45,21 @@ export default function Wallet() {
       <Button
         variant="contained"
         onClick={() => {
+          setWalletStatus("loading");
           createWallet();
         }}
       >
         Create Wallet
       </Button>
     </Box>
+  ) : walletStatus === "loading" ? (
+    <CircularProgress />
+  ) : walletStatus === "loaded" ? (
+    <>
+      Congratulations.
+      <br /> Your wallet has been created. <br /> And your keys have been sent.
+    </>
+  ) : (
+    <></>
   );
 }
