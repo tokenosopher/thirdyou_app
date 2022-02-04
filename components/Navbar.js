@@ -28,6 +28,9 @@ const Navbar = () => {
             <Link href="/mint">
               <a>{"Mint NFT"}</a>
             </Link>
+            <Link href="/collection">
+              <a>{"Your Collection"}</a>
+            </Link>
           </NavLinks>
         </FlexContainer>
       </NavBar>
