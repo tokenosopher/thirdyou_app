@@ -6,6 +6,7 @@ const Footer = dynamic(() => import("../components/Footer"));
 import MintForm from "../components/MintForm";
 
 export default function Mint() {
+  const address = "0xb03E33aED36644E77c544BA6Fadeaf6d9b5c134c"; // TODO SET THIS UP IN THE STATE AFTER LOGIN
   return (
     <>
       <Header />
@@ -26,7 +27,7 @@ export default function Mint() {
           flexDirection: "column",
         }}
       >
-        <MintForm />
+        <MintForm address={address} />
       </Box>
       <Footer />
     </>

@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Image from "next/image";
 import { Box, TextField } from "@mui/material";
+import { useTabContext } from "@mui/base";
 
 const client = ipfsHttpClient(process.env.INFURA_IPFS);
 
-export default function MintForm() {
+export default function MintForm(address) {
   const [fileUrl, setFileUrl] = useState(null);
   const updateField = (e) => {
     setItem({
@@ -32,6 +33,29 @@ export default function MintForm() {
     description: "",
     url: "",
   });
+
+  async function uploadMetadata(item) {
+    try {
+      const added = await client.add(Buffer.from(JSON.stringify(item)), {
+        progress: (prog) => console.log(`received: ${prog}`),
+      });
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      console.log("URL> ", url);
+      return url;
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+      return error;
+    }
+  }
+
+  async function handleMint(item, address) {
+    const uploadedMetadata = await uploadMetadata(item);
+
+    console.log("MetaData", uploadedMetadata); //URI TO MINT
+    console.log("Origin Address", address);
+
+    //NOW HERE I HAVE THE METADATA, AND THE RECIPIENT TO CALL SMART CONTRACT
+  }
 
   return (
     <Box
@@ -74,6 +98,8 @@ export default function MintForm() {
         <button
           onClick={() => {
             console.log("This is your item> ", item);
+
+            handleMint(item, address);
           }}
         >
           Create Digital Asset
