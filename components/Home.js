@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import dynamic from 'next/dynamic'
+
+const DynamicComponentWithNoSSR = dynamic(
+    () => import('../components/Login'),
+    { ssr: false }
+)
 
 function Home() {
   useEffect(() => {
@@ -18,7 +24,7 @@ function Home() {
         filter: "brightness(0.9)",
         position: "relative",
         top: 0,
-        zIndex: 1,
+        zIndex: 0,
         display: "flex",
         justifyContent: "center",
         alignContent: "center",
@@ -42,6 +48,7 @@ function Home() {
           priority="true"
         />
       </Button>
+      <DynamicComponentWithNoSSR />
     </Box>
   );
 }
