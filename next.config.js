@@ -7,10 +7,6 @@ module.exports = {
     FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-    TWILIO_SEND_EMAIL_URL: process.env.TWILIO_SEND_EMAIL_URL,
-    INFURA_IPFS: process.env.INFURA_IPFS,
-  },
-  images: {
-    domains: ["ipfs.infura.io", "ipfs.io"],
+    CLIENT_ID_WEB3AUTH: process.env.CLIENT_ID_WEB3AUTH,
   },
 };
