@@ -8,6 +8,7 @@ export default function MenuLeft(props) {
   const href_profile = "/profile";
   const href_mint = "/mint";
   const href_home = "/";
+  const href_collection = "/collection";
 
   return (
     <div className="left">
@@ -43,10 +44,19 @@ export default function MenuLeft(props) {
           </a>
         </Link>
         <br></br>
-        <Link id="min" href={href_mint}>
+        <Link id="mint" href={href_mint}>
           <a href={href_mint} onClick={props.handleNavbar}>
             <StyleLink>
               <span>Mint NFT</span>
+            </StyleLink>
+          </a>
+        </Link>
+        <br></br>
+
+        <Link id="collection" href={href_collection}>
+          <a href={href_collection} onClick={props.handleNavbar}>
+            <StyleLink>
+              <span>Your Collection</span>
             </StyleLink>
           </a>
         </Link>

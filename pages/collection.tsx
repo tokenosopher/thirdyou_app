@@ -1,11 +1,16 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import dynamic from "next/dynamic";
-const Header = dynamic(() => import("../components/Header"));
-const Footer = dynamic(() => import("../components/Footer"));
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getNfts } from "../components/lib/ops";
+import { CircularProgress } from "@mui/material";
 
+const CarrouselNoSSR = dynamic(() => import("react-material-ui-carousel"), {
+  ssr: false,
+});
+const Header = dynamic(() => import("../components/Header"));
+const Footer = dynamic(() => import("../components/Footer"));
 let images = [];
 let names = [];
 
@@ -78,8 +83,42 @@ export default function Collection() {
           flexDirection: "column",
         }}
       >
-        COLLECTION PAGE
+        {loaded ? (
+          <Box>
+            <br /> <br />
+            The collection of your beatiful NTFs are: <br /> <br />
+            <CarrouselNoSSR>
+              {images.map((item, i) => (
+                <Paper key={i}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      zIndex: "1",
+                      background: "white",
+                      height: "60vh",
+                    }}
+                  >
+                    <Box>
+                      <h2> {names[i]}</h2>
+                    </Box>
+
+                    <Box>
+                      {" "}
+                      <Image src={images[i]} width={444} height={444} />
+                    </Box>
+                  </Box>
+                </Paper>
+              ))}
+            </CarrouselNoSSR>
+          </Box>
+        ) : (
+          <CircularProgress />
+        )}
       </Box>
+
       <Footer />
     </>
   );
