@@ -92,6 +92,7 @@ function Login() {
         if (userInfo) {
             setUser(userInfo);
         }
+        console.log(userInfo);
     };
 
     const renderUnauthenticated = () => {
