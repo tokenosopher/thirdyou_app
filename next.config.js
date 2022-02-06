@@ -8,5 +8,11 @@ module.exports = {
     FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
     FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
     CLIENT_ID_WEB3AUTH: process.env.CLIENT_ID_WEB3AUTH,
+    TWILIO_SEND_EMAIL_URL: process.env.TWILIO_SEND_EMAIL_URL,
+    INFURA_IPFS: process.env.INFURA_IPFS,
+    MORALIS_API_KEY: process.env.MORALIS_API_KEY,
+  },
+  images: {
+    domains: ["ipfs.infura.io", "ipfs.io"],
   },
 };

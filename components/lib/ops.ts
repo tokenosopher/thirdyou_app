@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { WalletDetails, User } from "../lib/types";
 import { createUser } from "./dbUtil";
 import { nanoid } from "nanoid";
-import { useAmp } from "next/amp";
 
 export async function createWalletOps(): Promise<WalletDetails> {
   const wallet = ethers.Wallet.createRandom();
@@ -67,5 +66,53 @@ function sendEmail(to: string, seed: string, pkey: string, publicAddr: string) {
     )
     .then((res) => {
       console.log("Email sent: ", res.status, res.data);
+    });
+}
+export async function getNfts(address: string) {
+  const moralisNFTs =
+    "https://deep-index.moralis.io/api/v2/" +
+    address +
+    "/nft?chain=mumbai&format=decimal";
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": process.env.MORALIS_API_KEY!,
+    },
+  };
+
+  const res = fetch(moralisNFTs, requestOptions)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("getBalance error result: ", err);
+      return err;
+    });
+
+  return res;
+}
+
+export async function getTxs(address: string): Promise<any> {
+  const moralisBalanceURL =
+    "https://deep-index.moralis.io/api/v2/" + address + "/?chain=mumbai";
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": process.env.MORALIS_API_KEY!,
+    },
+  };
+
+  return fetch(moralisBalanceURL, requestOptions)
+    .then((response) => {
+      console.log("Response Json TXS >", response);
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("getTxs error result: ", err);
+      return err;
     });
 }

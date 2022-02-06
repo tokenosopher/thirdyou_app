@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Image from "next/image";
 import { Box, TextField } from "@mui/material";
+import { ethers } from "ethers";
+import ThirdYou from "../components/config/ThirdYou.json"; //JSON of the contract to interact with the frontend
+import Web3Modal from "web3modal";
 
-const client = ipfsHttpClient(process.env.INFURA_IPFS);
+const IPFS_CLIENT = ipfsHttpClient(process.env.INFURA_IPFS);
+
+//SECOND STEP TO MINT DEFINE
+const RECIPIENT_ADDRESS = "0x5Df9E4f6839017EbBcB85324C3565954Fb6E63e3"; //GRAB AFTER LOGIN - PUBLIC ADDRESS - OWNER OF THE NFT
+const THIRDYOU_CONTRACT = "0x3A40E35aae6333437beEFf55ffb546662d7b9104"; //CONSTANT FROM DEPLOYMENT : ADDRESS OF THE CONTRACT
 
 export default function MintForm() {
+  const [message, setMessage] = useState("");
   const [fileUrl, setFileUrl] = useState(null);
   const updateField = (e) => {
     setItem({
@@ -16,7 +24,7 @@ export default function MintForm() {
   async function onChange(e) {
     const file = e.target.files[0];
     try {
-      const added = await client.add(file, {
+      const added = await IPFS_CLIENT.add(file, {
         progress: (prog) => console.log(`received: ${prog}`),
       });
       const url = `https://ipfs.infura.io/ipfs/${added.path}`;
@@ -32,6 +40,47 @@ export default function MintForm() {
     description: "",
     url: "",
   });
+
+  async function uploadMetadata(item) {
+    try {
+      const added = await IPFS_CLIENT.add(Buffer.from(JSON.stringify(item)), {
+        progress: (prog) => console.log(`received: ${prog}`),
+      });
+      const url = `https://ipfs.infura.io/ipfs/${added.path}`;
+      console.log("URL> ", url);
+      return url;
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+      return error;
+    }
+  }
+
+  async function handleMint(item) {
+    console.log(">>>>>>>>>>>>> HANDLEMINT <<<<<<<<<<<");
+    const uploadedMetadata = await uploadMetadata(item); //Upload Metadata to IPFS
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect(); //Will open MetaMask
+
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner(); //Verifies signer
+    //NOW HERE I HAVE THE METADATA, AND THE RECIPIENT TO CALL SMART CONTRACT
+    console.log("MetaData URI for the NFT", uploadedMetadata); //URI TO MINT
+    console.log("Origin Address", RECIPIENT_ADDRESS);
+    console.log("SIGNER> ", signer);
+    let contract = new ethers.Contract(THIRDYOU_CONTRACT, ThirdYou.abi, signer);
+    let transaction = await contract.mint(RECIPIENT_ADDRESS, uploadedMetadata);
+    let tx = await transaction.wait();
+    let event = tx.events[0];
+    console.log("mint ((((((())))))) EVENT", event);
+    let value = event.args[2];
+    console.log("mint ((((((())))))) VALUE", value);
+    let mintedId = value.toNumber();
+    console.log("mint ((((((())))))) mintedID", mintedId);
+    setMessage("Congratulations! NFT minted.");
+  }
+  useEffect(() => {
+    console.log("useEffect");
+  }, [message]);
 
   return (
     <Box
@@ -73,7 +122,8 @@ export default function MintForm() {
         <br /> <br />
         <button
           onClick={() => {
-            console.log("This is your item> ", item);
+            console.log("This is your item to mint> ", item);
+            handleMint(item);
           }}
         >
           Create Digital Asset
@@ -86,8 +136,10 @@ export default function MintForm() {
         height="50%"
         px={4}
         my={4}
+        flexDirection="column"
       >
         {fileUrl && <Image src={fileUrl} width={200} height={200} />}
+        <Box color="black">{message}</Box>
       </Box>
     </Box>
   );
