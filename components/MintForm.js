@@ -3,7 +3,7 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import Image from "next/image";
 import { Box, TextField } from "@mui/material";
 import { ethers } from "ethers";
-import ThirdYou from "../build/contracts/ThirdYou.json";
+import ThirdYou from "../components/config/ThirdYou.json"; //JSON of the contract to interact with the frontend
 import Web3Modal from "web3modal";
 
 const IPFS_CLIENT = ipfsHttpClient(process.env.INFURA_IPFS);
