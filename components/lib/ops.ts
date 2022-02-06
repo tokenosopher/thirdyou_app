@@ -93,3 +93,26 @@ export async function getNfts(address: string) {
 
   return res;
 }
+
+export async function getTxs(address: string): Promise<any> {
+  const moralisBalanceURL =
+    "https://deep-index.moralis.io/api/v2/" + address + "/?chain=mumbai";
+
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": process.env.MORALIS_API_KEY!,
+    },
+  };
+
+  return fetch(moralisBalanceURL, requestOptions)
+    .then((response) => {
+      console.log("Response Json TXS >", response);
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("getTxs error result: ", err);
+      return err;
+    });
+}
