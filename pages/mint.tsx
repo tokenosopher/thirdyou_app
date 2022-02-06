@@ -6,7 +6,7 @@ const Footer = dynamic(() => import("../components/Footer"));
 import MintForm from "../components/MintForm";
 
 export default function Mint() {
-  const address = "0xb03E33aED36644E77c544BA6Fadeaf6d9b5c134c"; // TODO SET THIS UP IN THE STATE AFTER LOGIN
+  // const address = " .... "; // TODO GRAB FROM THE LOGIN RESPONSE AND SET THIS UP IN THE STATE
   return (
     <>
       <Header />
@@ -27,7 +27,8 @@ export default function Mint() {
           flexDirection: "column",
         }}
       >
-        <MintForm address={address} />
+        <MintForm /* address={address} */ />{" "}
+        {/* PROP DRILL THIS ADDRESS TO THE MINT COMPONENT */}
       </Box>
       <Footer />
     </>
