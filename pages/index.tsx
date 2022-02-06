@@ -3,25 +3,12 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
-import { CHAIN_NAMESPACES } from "@web3auth/base";
-import { MetamaskAdapter } from "@web3auth/metamask-adapter";
-import { ADAPTER_EVENTS } from "@web3auth/base";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { web3auth, init } from "../components/web3Component";
 import dynamic from "next/dynamic";
 
 export default function Home() {
   const router = useRouter();
-  let web3obj;
-
   useEffect(() => {
-    web3obj = web3auth;
-    console.log("web3obj", web3obj);
-
-    if (typeof window !== "undefined") {
-      const web3 = web3auth;
-      init(web3);
-    }
   });
 
   return (
