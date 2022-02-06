@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useSpring, animated, config } from "react-spring";
 import Link from "next/link";
+import {useAppContext} from "./state/AppContext";
 
 const Navbar = () => {
   const [headerStyle, setHeaderStyle] = useState({
@@ -13,7 +14,6 @@ const Navbar = () => {
     delay: 1000,
     config: config.wobbly,
   });
-
   return (
     <>
       <NavBar style={{ ...headerStyle }}>

@@ -7,7 +7,13 @@ import React, { useEffect, useState } from "react";
 import Button from '@mui/material/Button';
 import Image from "next/image";
 
+import { useAppContext } from "../components/state/AppContext";
+import { useDispatchContext } from "../components/state/AppContext";
+
 function Login() {
+
+    const context_app = useAppContext();
+    const dispatch_app = useDispatchContext();
     const [user, setUser] = useState(null);
     const [web3auth, setWeb3auth] = useState(null);
     const [loaded, setLoaded] = useState(false);
@@ -25,7 +31,7 @@ function Login() {
             }
             web3auth.on(ADAPTER_EVENTS.CONNECTED, (data) => {
                 console.log("Yeah!, you are successfully logged in", data);
-                setUser(data);
+                setUserState(data);
                 router.push("/dashboard");
             });
 
@@ -35,7 +41,7 @@ function Login() {
 
             web3auth.on(ADAPTER_EVENTS.DISCONNECTED, () => {
                 console.log("disconnected");
-                setUser(null);
+                setUserState(null);
             });
 
             web3auth.on(ADAPTER_EVENTS.ERRORED, (error) => {
@@ -76,6 +82,13 @@ function Login() {
         initializeModal();
     }, [subscribed]);
 
+    const setUserState = (userInfo) => {
+        setUser(userInfo);
+        dispatch_app({
+            userInfo: userInfo,
+        });
+    };
+
     const login = async () => {
         if (!web3auth) return;
         const provider = await web3auth.connect();
@@ -84,13 +97,14 @@ function Login() {
     const logout = async () => {
         if (!web3auth) return;
         await web3auth.logout();
-        setUser(null);
+        setUserState(null);
     };
     const getUserInfo = async () => {
         if (!web3auth) return;
         const userInfo = await web3auth.getUserInfo();
         if (userInfo) {
-            setUser(userInfo);
+            setUserState(userInfo);
+            await router.push("/dashboard");
         }
         console.log(userInfo);
     };
@@ -98,8 +112,13 @@ function Login() {
     const renderUnauthenticated = () => {
         return (
             <div>
-                <Button variant="contained" onClick={login}>
-                    LOGIN
+                <Button onClick={login}>
+                    <Image
+                        src="/images/logo.png"
+                        width="100%"
+                        height="100%"
+                        priority="true"
+                    />
                 </Button>
             </div>
         );

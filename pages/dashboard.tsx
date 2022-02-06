@@ -3,8 +3,18 @@ import { Box, Button } from "@mui/material";
 import dynamic from "next/dynamic";
 const Header = dynamic(() => import("../components/Header"));
 const Footer = dynamic(() => import("../components/Footer"));
+
+import { useAppContext } from "../components/state/AppContext";
+import { useDispatchContext } from "../components/state/AppContext";
 import Wallet from "../components/Wallet";
 export default function dashboard() {
+
+    const context_app = useAppContext();
+    const dispatch_app = useDispatchContext();
+
+    if (context_app && context_app.data) {
+
+    }
   return (
     <>
       {/* TODO Render according user Profile */}
@@ -26,7 +36,7 @@ export default function dashboard() {
           flexDirection: "column",
         }}
       >
-        <Wallet />
+          <Wallet />
       </Box>
       <Footer />
     </>

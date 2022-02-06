@@ -39,15 +39,6 @@ function Home() {
         layout="fill"
         priority="true"
       />
-
-      <Button onClick={() => router.push("/dashboard")}>
-        <Image
-          src="/images/logo.png"
-          width="100%"
-          height="100%"
-          priority="true"
-        />
-      </Button>
       <DynamicComponentWithNoSSR />
     </Box>
   );
