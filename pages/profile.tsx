@@ -138,7 +138,7 @@ export default function Profile() {
                     </Box>
                 ) : (
                     <>
-                        <CircularProgress />
+                       No Transactions
                     </>
                 )}
             </Box>
