@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { getNfts } from "../components/lib/ops";
 import { CircularProgress } from "@mui/material";
+import { useAppContext } from "../components/state/AppContext";
 
 const CarrouselNoSSR = dynamic(() => import("react-material-ui-carousel"), {
   ssr: false,
@@ -15,10 +16,16 @@ let images = [];
 let names = [];
 
 export default function Collection() {
+  const context_app = useAppContext();
+
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false);
+
   async function load() {
-    const result = await getNfts("0x5Df9E4f6839017EbBcB85324C3565954Fb6E63e3"); // GRAB THIS ADDRESS AFTER USER LOGS IN
+    console.log("LOAD COLLECTION");
+    const address = context_app.address;
+    console.log("LOAD COLLECTION", address);
+    const result = await getNfts(address); // GRAB THIS ADDRESS AFTER USER LOGS IN
 
     if (result !== undefined) {
       const nfts = result.result;

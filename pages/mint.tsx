@@ -5,7 +5,12 @@ const Header = dynamic(() => import("../components/Header"));
 const Footer = dynamic(() => import("../components/Footer"));
 import MintForm from "../components/MintForm";
 
+import { useAppContext } from "../components/state/AppContext";
+
 export default function Mint() {
+  const context_app = useAppContext();
+  const address = context_app.address;
+  console.log("MINT ADDRESS ", address);
   // const address = " .... "; // TODO GRAB FROM THE LOGIN RESPONSE AND SET THIS UP IN THE STATE
   return (
     <>
@@ -27,7 +32,7 @@ export default function Mint() {
           flexDirection: "column",
         }}
       >
-        <MintForm /* address={address} */ />{" "}
+        <MintForm address={address} />{" "}
         {/* PROP DRILL THIS ADDRESS TO THE MINT COMPONENT */}
       </Box>
       <Footer />

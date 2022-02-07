@@ -9,10 +9,11 @@ import Web3Modal from "web3modal";
 const IPFS_CLIENT = ipfsHttpClient(process.env.INFURA_IPFS);
 
 //SECOND STEP TO MINT DEFINE
-const RECIPIENT_ADDRESS = "0x5Df9E4f6839017EbBcB85324C3565954Fb6E63e3"; //GRAB AFTER LOGIN - PUBLIC ADDRESS - OWNER OF THE NFT
+
 const THIRDYOU_CONTRACT = "0x3A40E35aae6333437beEFf55ffb546662d7b9104"; //CONSTANT FROM DEPLOYMENT : ADDRESS OF THE CONTRACT
 
-export default function MintForm() {
+export default function MintForm(address) {
+  const RECIPIENT_ADDRESS = address; //GRAB AFTER LOGIN - PUBLIC ADDRESS - OWNER OF THE NFT
   const [message, setMessage] = useState("");
   const [fileUrl, setFileUrl] = useState(null);
   const updateField = (e) => {
@@ -65,10 +66,13 @@ export default function MintForm() {
     const signer = provider.getSigner(); //Verifies signer
     //NOW HERE I HAVE THE METADATA, AND THE RECIPIENT TO CALL SMART CONTRACT
     console.log("MetaData URI for the NFT", uploadedMetadata); //URI TO MINT
-    console.log("Origin Address", RECIPIENT_ADDRESS);
+    console.log("Origin Address", RECIPIENT_ADDRESS.address);
     console.log("SIGNER> ", signer);
     let contract = new ethers.Contract(THIRDYOU_CONTRACT, ThirdYou.abi, signer);
-    let transaction = await contract.mint(RECIPIENT_ADDRESS, uploadedMetadata);
+    let transaction = await contract.mint(
+      RECIPIENT_ADDRESS.address,
+      uploadedMetadata
+    );
     let tx = await transaction.wait();
     let event = tx.events[0];
     console.log("mint ((((((())))))) EVENT", event);
