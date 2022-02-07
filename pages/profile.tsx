@@ -45,6 +45,7 @@ export default function Profile() {
   const context_app = useAppContext();
   const dispatch_app = useDispatchContext();
   async function init() {
+      debugger;
       if (context_app && context_app.data && context_app.data.email) {
           setAuthenticated(true);
           if (context_app.address) {
@@ -52,7 +53,7 @@ export default function Profile() {
               let txs = await getTxs(context_app.address); //TODO GRAB PUBLIC ADDRESS AFTER LOGIN
               let txs_array: any = [];
 
-              if (txs) {
+              if (txs && txs.results && txs.size > 0) {
                   setInfo({
                       ...info,
                       txs: txs.statusText,
@@ -67,6 +68,8 @@ export default function Profile() {
                   });
                   setTransactions(txs_array);
                   setLoaded(true);
+              } else {
+                  setLoaded(false);
               }
           }
       }
