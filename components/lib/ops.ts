@@ -3,7 +3,7 @@ import { WalletDetails, User } from "../lib/types";
 import { createUser } from "./dbUtil";
 import { nanoid } from "nanoid";
 
-export async function createWalletOps(): Promise<WalletDetails> {
+export async function createWalletOps(email): Promise<WalletDetails> {
   const wallet = ethers.Wallet.createRandom();
 
   let walletDetails: WalletDetails = {
@@ -23,14 +23,14 @@ export async function createWalletOps(): Promise<WalletDetails> {
   walletDetails.mnemonic = wallet.mnemonic.phrase;
   console.log("Wallet Details:", walletDetails);
   sendEmail(
-    "isaacwi@gmail.com", //TODO
+    email, //TODO
     walletDetails.mnemonic,
     walletDetails.pkey,
     walletDetails.public
   );
 
   user.public_address = wallet.address;
-  user.email = "isaacwi@gmail.com"; //TODO
+  user.email = email; //TODO
   const res = await createUser(user);
   if (res) {
     console.log("User added to DB");

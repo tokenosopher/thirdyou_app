@@ -2,13 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Box, Button } from "@mui/material";
 import { createWalletOps } from "../components/lib/ops";
 import { CircularProgress } from "@mui/material";
+import { useAppContext } from "../components/state/AppContext";
 
 export default function Wallet() {
   const [walletStatus, setWalletStatus] = useState("");
-
+  const context_app = useAppContext();
+  let email = context_app.data.email;
   async function createWallet() {
     console.log("Creating Wallet ");
-    const wallet = await createWalletOps();
+    const wallet = await createWalletOps(email);
     console.log("Wallet created > ", wallet);
     if (wallet) setWalletStatus("loaded");
   }
