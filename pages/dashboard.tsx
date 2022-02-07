@@ -16,10 +16,11 @@ export default function Dashboard() {
   const dispatch_app = useDispatchContext();
 
   async function init() {
+      debugger;
     if (context_app && context_app.data) {
       setAuthenticated(true);
       const result = await searchAddressByEmail(
-        context_app.data.userInfo.email
+        context_app.data.email
       );
       console.log("DASHBOARD DATA", context_app.data);
       console.log("DASHBOARD result", result.public_address);
