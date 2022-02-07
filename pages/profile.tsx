@@ -7,6 +7,8 @@ const Header = dynamic(() => import("../components/Header"));
 const Footer = dynamic(() => import("../components/Footer"));
 
 import { getTxs } from "../components/lib/ops";
+import {useAppContext, useDispatchContext} from "../components/state/AppContext";
+import {searchAddressByEmail} from "../components/lib/dbUtil";
 
 const columns = [
   {
@@ -37,75 +39,107 @@ export default function Profile() {
   });
 
   const [transactions, setTransactions] = useState([]);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [address, setAddress] = useState("");
 
+  const context_app = useAppContext();
+  const dispatch_app = useDispatchContext();
   async function init() {
-    let txs = await getTxs("0x5Df9E4f6839017EbBcB85324C3565954Fb6E63e3"); //TODO GRAB PUBLIC ADDRESS AFTER LOGIN
-    let txs_array: any = [];
+      if (context_app && context_app.data && context_app.data.email) {
+          setAuthenticated(true);
+          if (context_app.address) {
+              setAddress(context_app.address);
+              let txs = await getTxs(context_app.address); //TODO GRAB PUBLIC ADDRESS AFTER LOGIN
+              let txs_array: any = [];
 
-    if (txs) {
-      setInfo({
-        ...info,
-        txs: txs.statusText,
-      });
-      txs.result.map((tx: any, key: any) => {
-        txs_array.push({
-          id: key,
-          from: tx.from_address,
-          to: tx.to_address,
-          amount: (tx.value / 1000000000000000000).toFixed(4),
-        });
-      });
-      setTransactions(txs_array);
-      setLoaded(true);
-    }
+              if (txs) {
+                  setInfo({
+                      ...info,
+                      txs: txs.statusText,
+                  });
+                  txs.result.map((tx: any, key: any) => {
+                      txs_array.push({
+                          id: key,
+                          from: tx.from_address,
+                          to: tx.to_address,
+                          amount: (tx.value / 1000000000000000000).toFixed(4),
+                      });
+                  });
+                  setTransactions(txs_array);
+                  setLoaded(true);
+              }
+          }
+      }
   }
 
-  useEffect(() => {
-    init();
-  }, [loaded]);
+    useEffect(() => {
+        init();
+    }, []);
   return (
     <>
       <Header />
-      <Box
-        sx={{
-          width: "100%",
-          height: "85vh",
-          opacity: 0.9,
-          filter: "brightness(0.9)",
-          position: "relative",
-          top: 0,
-          zIndex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          bgcolor: "black",
-          color: "white",
-          flexDirection: "column",
-        }}
-      >
-        {loaded ? (
-          <Box
-            display="flex"
-            height="50vh"
-            width="75%"
-            my={4}
-            bgcolor="white"
-            color="black"
-          >
-            <DataGrid
-              rows={transactions}
-              columns={columns}
-              pageSize={20}
-              checkboxSelection={false}
-            />
-          </Box>
-        ) : (
-          <>
-            <CircularProgress />
-          </>
+        {address === "" ? (
+            <Box
+                sx={{
+                    height: "85vh",
+                    opacity: 0.9,
+                    filter: "brightness(0.9)",
+                    position: "relative",
+                    top: 0,
+                    zIndex: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                    bgcolor: "black",
+                    color: "white",
+                    flexDirection: "column",
+                }}
+            >
+                <Box> Please create wallet by going to Dashboard and clicking Create Wallet button.</Box>
+            </Box>
+            ) : (
+            <Box
+                sx={{
+                    width: "100%",
+                    height: "85vh",
+                    opacity: 0.9,
+                    filter: "brightness(0.9)",
+                    position: "relative",
+                    top: 0,
+                    zIndex: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    alignItems: "center",
+                    bgcolor: "black",
+                    color: "white",
+                    flexDirection: "column",
+                }}
+            >
+                {loaded ? (
+                    <Box
+                        display="flex"
+                        height="50vh"
+                        width="75%"
+                        my={4}
+                        bgcolor="white"
+                        color="black"
+                    >
+                        <DataGrid
+                            rows={transactions}
+                            columns={columns}
+                            pageSize={20}
+                            checkboxSelection={false}
+                        />
+                    </Box>
+                ) : (
+                    <>
+                        <CircularProgress />
+                    </>
+                )}
+            </Box>
         )}
-      </Box>
       <Footer />
     </>
   );
