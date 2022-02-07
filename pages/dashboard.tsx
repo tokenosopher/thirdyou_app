@@ -16,19 +16,19 @@ export default function Dashboard() {
   const dispatch_app = useDispatchContext();
 
   async function init() {
-      debugger;
+    debugger;
     if (context_app && context_app.data) {
       setAuthenticated(true);
-      const result = await searchAddressByEmail(
-        context_app.data.email
-      );
+      let email = context_app.data.email;
+
+      const result = await searchAddressByEmail(email);
       console.log("DASHBOARD DATA", context_app.data);
       console.log("DASHBOARD result", result.public_address);
-
-      setAddress(result.public_address);
+      let publicaddress = result.public_address;
+      setAddress(publicaddress);
       dispatch_app({
         type: "ADDRESS",
-        address: address,
+        address: publicaddress,
       });
 
       console.log("DASHBOARD DATA", context_app.data);
